@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.ApplicationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-02-14T10:05:31" hostname="LAPTOP-CODEF7QL" time="1.265">
+  <properties/>
+  <testcase name="accessAllHeroesEndpointQueryAllPages_AssertCorrectInformation" classname="com.example.ApplicationTest" time="1.265"/>
+  <system-out><![CDATA[2022-02-14 13:05:31.706 [Test worker] INFO  ktor.test - Autoreload is disabled because the development mode is off.
+2022-02-14 13:05:31.726 [Test worker] INFO  ktor.test - Application started in 0.119 seconds.
+2022-02-14 13:05:31.765 [Test worker] INFO  [Koin] - loaded 1 definitions - 2.8579 ms
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
