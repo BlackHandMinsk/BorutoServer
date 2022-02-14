@@ -124,6 +124,106 @@ class ApplicationTest {
     }
 
 
+    @ExperimentalSerializationApi
+    @Test
+    fun accessSearchHeroesEndpointQueryHeroName_AssertSingleHeroResult(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/boruto/heroes/search?name=sas").apply {
+                assertEquals(
+                    expected = HttpStatusCode.OK,
+                    actual = response.status()
+                )
+                val actual = Json.decodeFromString<ApiResponse>(response.content.toString())
+                    .heroes.size
+                assertEquals(
+                    expected = 1,
+                    actual = actual
+                )
+            }
+        }
+    }
+
+
+    @ExperimentalSerializationApi
+    @Test
+    fun accessSearchHeroesEndpointQueryHeroName_AssertMultipleeHeroResult(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/boruto/heroes/search?name=sa").apply {
+                assertEquals(
+                    expected = HttpStatusCode.OK,
+                    actual = response.status()
+                )
+                val actual = Json.decodeFromString<ApiResponse>(response.content.toString())
+                    .heroes.size
+                assertEquals(
+                    expected = 3,
+                    actual = actual
+                )
+            }
+        }
+    }
+
+
+    @ExperimentalSerializationApi
+    @Test
+    fun accessSearchHeroesEndpointQueryEmptyText_AssertEmptyListAsAResult(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/boruto/heroes/search?name=").apply {
+                assertEquals(
+                    expected = HttpStatusCode.OK,
+                    actual = response.status()
+                )
+                val actual = Json.decodeFromString<ApiResponse>(response.content.toString())
+                    .heroes
+                assertEquals(
+                    expected = emptyList(),
+                    actual = actual
+                )
+            }
+        }
+    }
+
+
+    @ExperimentalSerializationApi
+    @Test
+    fun accessSearchHeroesEndpointQueryNonExistingHero_AssertEmptyListAsAResult(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/boruto/heroes/search?name=unknown").apply {
+                assertEquals(
+                    expected = HttpStatusCode.OK,
+                    actual = response.status()
+                )
+                val actual = Json.decodeFromString<ApiResponse>(response.content.toString())
+                    .heroes
+                assertEquals(
+                    expected = emptyList(),
+                    actual = actual
+                )
+            }
+        }
+    }
+
+
+    @ExperimentalSerializationApi
+    @Test
+    fun accessNonExistingEndpoint_AssertNotFound(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/unknown").apply {
+                assertEquals(
+                    expected = HttpStatusCode.NotFound,
+                    actual = response.status()
+                )
+                assertEquals(
+                    expected = "Page not found.",
+                    actual = response.content
+                )
+            }
+        }
+    }
+
+
+
+
 
 
     private fun calculatePage(page:Int):Map<String,Int?>{
