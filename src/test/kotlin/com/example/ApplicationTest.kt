@@ -70,9 +70,63 @@ class ApplicationTest {
             }
         }
 
+    @ExperimentalSerializationApi
+    @Test
+    fun accessAllHeroesEndpointQueryNonExistingPageNumber_AssertError(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/boruto/heroes?page=6").apply {
+                assertEquals(
+                    expected = HttpStatusCode.NotFound,
+                    actual = response.status()
+                )
+                val expected = ApiResponse(
+                    success = false,
+                    message = "Heroes not found.",
+
+                )
+
+                val actual = Json.decodeFromString<ApiResponse>(response.content.toString())
 
 
-private fun calculatePage(page:Int):Map<String,Int?>{
+                assertEquals(
+                    expected = expected,
+                    actual = actual
+                )
+        }
+        }
+    }
+
+
+    @ExperimentalSerializationApi
+    @Test
+    fun accessAllHeroesEndpointQueryInvalidPageNumber_AssertError(){
+        withTestApplication(moduleFunction = Application::module) {
+            handleRequest(HttpMethod.Get, "/boruto/heroes?page=invalid").apply {
+                assertEquals(
+                    expected = HttpStatusCode.BadRequest,
+                    actual = response.status()
+                )
+                val expected = ApiResponse(
+                    success = false,
+                    message = "Only numbers Allowed.",
+
+                    )
+
+                val actual = Json.decodeFromString<ApiResponse>(response.content.toString())
+
+
+                assertEquals(
+                    expected = expected,
+                    actual = actual
+                )
+            }
+        }
+    }
+
+
+
+
+    private fun calculatePage(page:Int):Map<String,Int?>{
     var prevPage:Int? = page
     var nextPage:Int? = page
 
